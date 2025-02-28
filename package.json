@@ -1,7 +1,7 @@
 {
-  "name": "@seamapi/makenew-tsmodule",
-  "version": "1.5.0",
-  "description": "Package skeleton for a TypeScript module.",
+  "name": "@seamapi/dbtypr",
+  "version": "0.0.0",
+  "description": "Extends TypeScript types from a Zapatos schema for wider compatibility and customization.",
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
@@ -22,9 +22,9 @@
   "keywords": [
     "node"
   ],
-  "homepage": "https://github.com/seamapi/makenew-tsmodule",
-  "bugs": "https://github.com/seamapi/makenew-tsmodule/issues",
-  "repository": "seamapi/makenew-tsmodule",
+  "homepage": "https://github.com/seamapi/dbtypr",
+  "bugs": "https://github.com/seamapi/dbtypr/issues",
+  "repository": "seamapi/dbtypr",
   "license": "MIT",
   "author": {
     "name": "Seam Labs, Inc.",
