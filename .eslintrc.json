@@ -1,6 +1,9 @@
 {
   "root": true,
-  "plugins": ["simple-import-sort", "unused-imports"],
+  "plugins": [
+    "simple-import-sort",
+    "unused-imports"
+  ],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": "latest"
@@ -18,33 +21,68 @@
         "ignoreRestSiblings": true
       }
     ],
-    "import/extensions": ["error", "ignorePackages"],
-    "import/no-duplicates": ["error", { "prefer-inline": true }],
+    "import/extensions": [
+      "error",
+      "ignorePackages"
+    ],
+    "import/no-duplicates": [
+      "error",
+      {
+        "prefer-inline": true
+      }
+    ],
     "import/no-relative-parent-imports": "error",
     "simple-import-sort/imports": [
       "error",
       {
         "groups": [
-          ["^\\u0000"],
-          ["^node:"],
-          ["^@?\\w"],
-          ["@seamapi/dbtypr"],
-          ["^lib/"],
-          ["^"],
-          ["^\\."]
+          [
+            "^\\u0000"
+          ],
+          [
+            "^node:"
+          ],
+          [
+            "^@?\\w"
+          ],
+          [
+            "@seamapi/dbtypr"
+          ],
+          [
+            "^lib/"
+          ],
+          [
+            "^"
+          ],
+          [
+            "^\\."
+          ]
         ]
       }
     ],
-    "simple-import-sort/exports": "error"
+    "simple-import-sort/exports": "error",
   },
   "overrides": [
     {
-      "files": ["*.js", "*.mjs", "*.cjs"],
-      "extends": ["standard", "prettier"]
+      "files": [
+        "*.js",
+        "*.mjs",
+        "*.cjs"
+      ],
+      "extends": [
+        "standard",
+        "prettier"
+      ]
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "extends": ["standard-with-typescript", "prettier"],
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "extends": [
+        "standard-with-typescript",
+        "prettier"
+      ],
       "parserOptions": {
         "project": "./tsconfig.json"
       },
