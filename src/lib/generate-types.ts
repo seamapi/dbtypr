@@ -43,7 +43,7 @@ const createGeneratedTypesFiles = (
     createGeneratedUtilsFile({ project }, config),
   ]
 
-  if (config.generate_knex_types) {
+  if (config.generate_knex_types === true) {
     generated_types_files.push(
       createKnexIndexFile({ project, schemas }, config),
     )
@@ -86,7 +86,7 @@ const createCustomTypesFiles = (
           createCustomTypesFile({ project, schema, table }, config),
         )
       } catch (error: any) {
-        if (error.message.includes('A source file already exists')) {
+        if (error.message.includes('A source file already exists') === true) {
           continue
         }
         throw error as Error

@@ -83,7 +83,7 @@ export const createGeneratedIndexFile = (
     },
   ]
 
-  if (config.generate_knex_types) {
+  if (config.generate_knex_types === true) {
     statements.push({
       kind: StructureKind.ExportDeclaration,
       namespaceExport: 'knex',

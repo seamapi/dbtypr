@@ -38,16 +38,18 @@ export const createSchemaGeneratedTypeIndexFile = (
   ]
 
   for (const table of tables) {
+    const pascal_table_name = pascal_table_names[table.name] ?? ''
+
     statements.push({
       kind: StructureKind.ImportDeclaration,
       isTypeOnly: true,
-      moduleSpecifier: `./${pascal_table_names[table.name]}`,
+      moduleSpecifier: `./${pascal_table_name}`,
       namedImports: [
-        pascal_table_names[table.name]!,
+        pascal_table_name,
         ...(table.is_affected_by_pgtui_bugs
-          ? [`${pascal_table_names[table.name]}WithPgtuiBugs`]
+          ? [`${pascal_table_name}WithPgtuiBugs`]
           : []),
-        `${pascal_table_names[table.name]}Initializer`,
+        `${pascal_table_name}Initializer`,
       ],
     })
   }
@@ -71,7 +73,7 @@ export const createSchemaGeneratedTypeIndexFile = (
     (writer) => writer.newLine(),
   )
 
-  if (config.generate_knex_types) {
+  if (config.generate_knex_types === true) {
     statements.push({
       kind: StructureKind.Interface,
       isExported: true,
@@ -83,7 +85,7 @@ export const createSchemaGeneratedTypeIndexFile = (
             : `"${schema.name}.${table.name}"`,
         type: table.is_affected_by_pgtui_bugs
           ? `${pascal_table_names[table.name]}WithPgtuiBugs`
-          : pascal_table_names[table.name]!,
+          : (pascal_table_names[table.name] ?? ''),
       })),
     })
   }
@@ -107,7 +109,7 @@ export const createSchemaGeneratedTypeIndexFile = (
       kind: StructureKind.ExportDeclaration,
       isTypeOnly: true,
       namedExports: tables.flatMap((table) => [
-        pascal_table_names[table.name]!,
+        pascal_table_names[table.name] ?? '',
         ...(table.is_affected_by_pgtui_bugs
           ? [`${pascal_table_names[table.name]}WithPgtuiBugs`]
           : []),

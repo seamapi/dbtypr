@@ -17,7 +17,7 @@ export const readDatabaseTree = (config: Config): DatabaseTree => {
   const source_file = project.addSourceFileAtPath(`${zapatos_dir}/schema.d.ts`)
   const zapatos_module = source_file.getModules()[0]
 
-  if (!zapatos_module) {
+  if (zapatos_module === undefined) {
     throw new Error('Could not find the zapatos module in the schema file')
   }
 
@@ -123,7 +123,7 @@ const readCustomZapatosTypes = (config: Config) => {
   for (const source_file of source_files) {
     const zapatos_module = source_file.getModules()[0]
 
-    if (!zapatos_module) {
+    if (zapatos_module === undefined) {
       throw new Error('Could not find the zapatos module in the schema file')
     }
 
