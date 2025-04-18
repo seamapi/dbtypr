@@ -1,6 +1,9 @@
 {
   "root": true,
-  "plugins": ["simple-import-sort", "unused-imports"],
+  "plugins": [
+    "simple-import-sort",
+    "unused-imports"
+  ],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": "latest"
@@ -18,7 +21,10 @@
         "ignoreRestSiblings": true
       }
     ],
-    "import/extensions": ["error", "ignorePackages"],
+    "import/extensions": [
+      "error",
+      "ignorePackages"
+    ],
     "import/no-duplicates": [
       "error",
       {
@@ -30,27 +36,53 @@
       "error",
       {
         "groups": [
-          ["^\\u0000"],
-          ["^node:"],
-          ["^@?\\w"],
-          ["@seamapi/dbtypr"],
-          ["^lib/"],
-          ["^"],
-          ["^\\."]
+          [
+            "^\\u0000"
+          ],
+          [
+            "^node:"
+          ],
+          [
+            "^@?\\w"
+          ],
+          [
+            "@seamapi/dbtypr"
+          ],
+          [
+            "^lib/"
+          ],
+          [
+            "^"
+          ],
+          [
+            "^\\."
+          ]
         ]
       }
     ],
-    "simple-import-sort/exports": "error",
-    "@typescript-eslint/explicit-function-return-type": "off"
+    "simple-import-sort/exports": "error"
   },
   "overrides": [
     {
-      "files": ["*.js", "*.mjs", "*.cjs"],
-      "extends": ["standard", "prettier"]
+      "files": [
+        "*.js",
+        "*.mjs",
+        "*.cjs"
+      ],
+      "extends": [
+        "standard",
+        "prettier"
+      ]
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "extends": ["standard-with-typescript", "prettier"],
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "extends": [
+        "standard-with-typescript",
+        "prettier"
+      ],
       "parserOptions": {
         "project": "./tsconfig.json"
       },
@@ -63,11 +95,17 @@
           }
         ],
         "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/naming-convention": [
           "error",
           {
-            "selector": ["interface", "typeAlias"],
-            "format": ["PascalCase"],
+            "selector": [
+              "interface",
+              "typeAlias"
+            ],
+            "format": [
+              "PascalCase"
+            ],
             "leadingUnderscore": "forbid",
             "trailingUnderscore": "forbid"
           },
@@ -79,27 +117,54 @@
               "variable",
               "parameter"
             ],
-            "types": ["function"],
-            "format": ["camelCase"]
+            "types": [
+              "function"
+            ],
+            "format": [
+              "camelCase"
+            ]
           },
           {
-            "selector": ["objectLiteralProperty"],
+            "selector": [
+              "objectLiteralProperty"
+            ],
             "format": null
           },
           {
-            "selector": ["parameterProperty", "variable", "parameter"],
-            "types": ["boolean", "string", "number", "array"],
-            "format": ["snake_case", "UPPER_CASE"],
+            "selector": [
+              "parameterProperty",
+              "variable",
+              "parameter"
+            ],
+            "types": [
+              "boolean",
+              "string",
+              "number",
+              "array"
+            ],
+            "format": [
+              "snake_case",
+              "UPPER_CASE"
+            ],
             "leadingUnderscore": "allow",
             "trailingUnderscore": "allow"
           },
           {
-            "selector": ["function"],
-            "format": ["camelCase"]
+            "selector": [
+              "function"
+            ],
+            "format": [
+              "camelCase"
+            ]
           },
           {
             "selector": "default",
-            "format": ["camelCase", "snake_case", "UPPER_CASE", "PascalCase"],
+            "format": [
+              "camelCase",
+              "snake_case",
+              "UPPER_CASE",
+              "PascalCase"
+            ],
             "leadingUnderscore": "allow",
             "trailingUnderscore": "forbid"
           }
