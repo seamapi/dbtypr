@@ -1,1 +1,1 @@
-export { todo } from './todo.js'
+export * from './generate-types.js'
