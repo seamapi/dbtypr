@@ -16,10 +16,9 @@ export const createGeneratedIndexFile = (
   config: Config,
 ): SourceFile => {
   const { project, schemas } = args
-  const { output_dir, main_schema = 'public' } = config
+  const { output_dir } = config
 
   const schema_import_statements: StatementedNodeStructure['statements'] = []
-  const schema_export_statements: StatementedNodeStructure['statements'] = []
   const schemas_tables: string[] = []
 
   for (const schema of schemas) {
@@ -32,15 +31,6 @@ export const createGeneratedIndexFile = (
       namedImports: [`${pascal_schema_name}Tables`],
     })
     schemas_tables.push(`${pascal_schema_name}Tables`)
-    schema_export_statements.push({
-      kind: StructureKind.ExportDeclaration,
-      moduleSpecifier: `./${schema.name}`,
-      ...(schema.name === main_schema
-        ? {}
-        : {
-            namespaceExport: schema.name,
-          }),
-    })
   }
 
   const statements: StatementedNodeStructure['statements'] = [
@@ -73,8 +63,6 @@ export const createGeneratedIndexFile = (
       name: 'DatabaseTable',
       type: 'DatabaseTables[number]',
     },
-    (writer) => writer.newLine(),
-    ...schema_export_statements,
     (writer) => writer.newLine(),
     {
       kind: StructureKind.ExportDeclaration,
