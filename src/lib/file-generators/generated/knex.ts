@@ -16,7 +16,7 @@ export const createKnexIndexFile = (
   config: Config,
 ): SourceFile => {
   const { project, schemas } = args
-  const { output_dir } = config
+  const { output_dir, main_schema } = config
 
   const statements: StatementedNodeStructure['statements'] = []
   const module_interface_statements: StatementedNodeStructure['statements'] = []
@@ -35,12 +35,30 @@ export const createKnexIndexFile = (
       ],
     })
 
+    if (schema.name === main_schema) {
+      statements.push({
+        kind: StructureKind.TypeAlias,
+        name: `Prefixed${pascalCase(schema.name)}TypeMap`,
+        type: `{ [K in keyof ${pascalCase(schema.name)}TypeMap as \`${schema.name}.\${K}\`]: ${pascalCase(schema.name)}TypeMap[K] }`,
+        isExported: false,
+      })
+    }
+
     module_interface_statements.push({
       kind: StructureKind.Interface,
       name: 'Tables',
       extends: [`${pascalCase(schema.name)}TypeMap`],
       properties: [],
     })
+
+    if (schema.name === main_schema) {
+      module_interface_statements.push({
+        kind: StructureKind.Interface,
+        name: 'Tables',
+        extends: [`Prefixed${pascalCase(schema.name)}TypeMap`],
+        properties: [],
+      })
+    }
   }
 
   // Create the module declaration

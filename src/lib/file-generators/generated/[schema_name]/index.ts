@@ -16,7 +16,7 @@ export const createSchemaGeneratedTypeIndexFile = (
   config: Config,
 ): SourceFile => {
   const { project, schema } = args
-  const { output_dir } = config
+  const { output_dir, main_schema } = config
 
   const pascal_schema_name = pascalCase(schema.name)
 
@@ -80,7 +80,7 @@ export const createSchemaGeneratedTypeIndexFile = (
       name: 'KnexSchemaTypeMap',
       properties: tables.map((table) => ({
         name:
-          schema.name === 'seam'
+          schema.name === main_schema
             ? table.name
             : `"${schema.name}.${table.name}"`,
         type: table.is_affected_by_pgtui_bugs
