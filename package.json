@@ -1,6 +1,6 @@
 {
   "name": "@seamapi/dbtypr",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Extends TypeScript types from a Zapatos schema for wider compatibility and customization.",
   "type": "module",
   "main": "index.js",
