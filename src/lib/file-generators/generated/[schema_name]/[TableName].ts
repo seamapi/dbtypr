@@ -85,6 +85,11 @@ export const createResultingTypeFile = (
       isExported: true,
       name: `${pascal_table_name}WithPgtuiBugs`,
       type: `ReproducePgtuiBugs<${pascal_table_name}>`,
+      docs: [
+        {
+          description: `@deprecated Reproduces type bugs from the legacy \`pgtui\` library and should not be used in new code.\n\nSpecifically:\n- Columns ending in \`_id\` are incorrectly typed as \`string\`, regardless of their actual database type.\n- \`jsonb\` columns are typed as \`any\` instead of a more specific type.`,
+        },
+      ],
     })
   }
 
