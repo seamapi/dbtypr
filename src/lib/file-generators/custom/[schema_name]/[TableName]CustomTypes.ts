@@ -24,7 +24,7 @@ export const createCustomTypesFile = (
   const statements: StatementedNodeStructure['statements'] = [
     {
       kind: StructureKind.ImportDeclaration,
-      namedImports: ['SubsetOf'],
+      namedImports: ['CreateCustomTypes'],
       moduleSpecifier: '../../generated/utils',
       isTypeOnly: true,
     },
@@ -38,7 +38,7 @@ export const createCustomTypesFile = (
     {
       kind: StructureKind.TypeAlias,
       name: `${pascal_table_name}CustomTypes`,
-      type: `SubsetOf<Selectable${pascal_table_name}, {}>`,
+      type: `CreateCustomTypes<Selectable${pascal_table_name}, {}>`,
       isExported: true,
     },
     (writer) => writer.blankLine(),
