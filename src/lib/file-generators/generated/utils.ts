@@ -39,7 +39,7 @@ type NullableKeys<T> = {
 /**
  * Allows creating a type that is a subset of another type.
  */
-export type SubsetOf<
+export type CreateCustomTypes<
   Super,
   Sub extends {
     // The types of keys present in sub must be assignable to the types of the same keys in super
