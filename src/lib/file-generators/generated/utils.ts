@@ -13,6 +13,7 @@ export const createGeneratedUtilsFile = (
 
   const file_source = `import type { JSONValue } from "zapatos/db"
 import { type ColumnType } from "kysely"
+import { Knex } from "knex"
 
 type PartialWithNever<T> = {
   [P in keyof T as T[P] extends never ? never : P]?: T[P]
@@ -29,6 +30,16 @@ export type KyselyTable<Selectable, Initializer> = {
       : never
   >
 }
+
+type KnexInsertableTable<T> = {
+  [K in keyof T]: Knex.MaybeRawColumn<T[K]>
+}
+
+export type KnexTable<Selectable, Initializer> = Knex.CompositeTableType<
+  Selectable,
+  Partial<KnexInsertableTable<Initializer>>, // TODO remove \`Partial\` once we fix the code
+  Partial<KnexInsertableTable<Initializer>>
+>
 
 type KeysOfUnion<T> = T extends T ? keyof T : never
 
@@ -56,8 +67,17 @@ export type CreateCustomTypes<
 > = Sub
 
 // Replaces the values of From with the values of To and ignores the rest of the properties of To
-type ReplaceValueTypes<From, To> = Omit<From, keyof To> &
-  Pick<To, Extract<keyof To, keyof From>>
+type ReplaceValueTypes<From, To> = {
+  [K in keyof From]: K extends keyof To ? To[K] : From[K]
+}
+
+type AllowJsonStringify<OriginalInsertable, CustomizedInsertable> = {
+  [K in keyof OriginalInsertable]: K extends keyof CustomizedInsertable
+    ? [JSONValue] extends [OriginalInsertable[K]]
+      ? CustomizedInsertable[K] | string
+      : CustomizedInsertable[K]
+    : never
+}
 
 // Works to make From properties optional but it would not work to make them mandatory as From[K] would include undefined
 // TODO improve to keep unions (if possible)
@@ -75,9 +95,12 @@ export type CustomizeDbType<DbType, CustomProperties> = ReplaceValueTypes<
 >
 
 export type CustomizeDbTypeInitializer<DbTypeInitializer, CustomProperties> =
-  ReplaceValueTypes<
+  AllowJsonStringify<
     DbTypeInitializer,
-    ReplaceKeyTypes<CustomProperties, DbTypeInitializer>
+    ReplaceValueTypes<
+      DbTypeInitializer,
+      ReplaceKeyTypes<CustomProperties, DbTypeInitializer>
+    >
   >
 
 // TODO Migrating from pgtui to our custom types is a pain because of two bugs in pgtui.

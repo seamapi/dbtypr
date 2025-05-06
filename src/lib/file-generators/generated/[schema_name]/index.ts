@@ -32,7 +32,7 @@ export const createSchemaGeneratedTypeIndexFile = (
     {
       kind: StructureKind.ImportDeclaration,
       moduleSpecifier: '../utils',
-      namedImports: ['KyselyTable'],
+      namedImports: ['KyselyTable', 'KnexTable'],
       isTypeOnly: true,
     },
   ]
@@ -47,7 +47,10 @@ export const createSchemaGeneratedTypeIndexFile = (
       namedImports: [
         pascal_table_name,
         ...(table.is_affected_by_pgtui_bugs
-          ? [`${pascal_table_name}WithPgtuiBugs`]
+          ? [
+              `${pascal_table_name}WithPgtuiBugs`,
+              `${pascal_table_name}InitializerWithPgtuiBugs`,
+            ]
           : []),
         `${pascal_table_name}Initializer`,
       ],
@@ -83,9 +86,15 @@ export const createSchemaGeneratedTypeIndexFile = (
           schema.name === main_schema
             ? table.name
             : `"${schema.name}.${table.name}"`,
-        type: table.is_affected_by_pgtui_bugs
-          ? `${pascal_table_names[table.name]}WithPgtuiBugs`
-          : (pascal_table_names[table.name] ?? ''),
+        type: `KnexTable<${
+          table.is_affected_by_pgtui_bugs
+            ? `${pascal_table_names[table.name]}WithPgtuiBugs`
+            : pascal_table_names[table.name]
+        }, ${
+          table.is_affected_by_pgtui_bugs
+            ? `${pascal_table_names[table.name]}InitializerWithPgtuiBugs`
+            : `${pascal_table_names[table.name]}Initializer`
+        }>`,
       })),
     })
   }
