@@ -6,6 +6,7 @@ export interface Config {
   generate_knex_types?: boolean
   main_schema?: string
   file_header?: string
+  is_generic_provider_enabled?: boolean
 }
 
 export interface DatabaseTree {
@@ -24,6 +25,7 @@ export interface Table {
   is_customizable: boolean
   is_affected_by_pgtui_bugs: boolean
   uses_zapatos_column_type: boolean
+  use_generic_provider: boolean
 }
 
 export interface Column {

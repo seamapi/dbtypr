@@ -34,10 +34,33 @@ export const createCustomTypesFile = (
       moduleSpecifier: `../../generated/${schema.name}/${pascal_table_name}QueryTypes`,
       isTypeOnly: true,
     },
+  ]
+
+  if (table.use_generic_provider) {
+    statements.push({
+      kind: StructureKind.ImportDeclaration,
+      moduleSpecifier: 'lib/spi/provider-model-types',
+      namedImports: ['ProviderTypes'],
+      isTypeOnly: true,
+    })
+  }
+
+  statements.push(
     (writer) => writer.blankLine(),
     {
       kind: StructureKind.TypeAlias,
       name: `${pascal_table_name}CustomTypes`,
+      ...(table.use_generic_provider
+        ? {
+            typeParameters: [
+              {
+                name: 'T',
+                constraint: 'ProviderTypes',
+                default: 'ProviderTypes',
+              },
+            ],
+          }
+        : {}),
       type: `CreateCustomTypes<Selectable${pascal_table_name}, {}>`,
       isExported: true,
     },
@@ -47,7 +70,7 @@ export const createCustomTypesFile = (
       isExportEquals: false,
       expression: `${pascal_table_name}CustomTypes`,
     },
-  ]
+  )
 
   return project.createSourceFile(
     `${output_dir}/custom/${schema.name}/${pascal_table_name}CustomTypes.ts`,
