@@ -57,6 +57,14 @@ export const createResultingTypeFile = (
         isTypeOnly: true,
       },
     )
+    if (table.use_generic_provider) {
+      statements.push({
+        kind: StructureKind.ImportDeclaration,
+        moduleSpecifier: 'lib/spi/provider-model-types',
+        namedImports: ['ProviderTypes'],
+        isTypeOnly: true,
+      })
+    }
   }
 
   statements.push(
@@ -65,16 +73,38 @@ export const createResultingTypeFile = (
       kind: StructureKind.TypeAlias,
       isExported: true,
       name: pascal_table_name,
+      ...(table.use_generic_provider
+        ? {
+            typeParameters: [
+              {
+                name: 'T',
+                constraint: 'ProviderTypes',
+                default: 'ProviderTypes',
+              },
+            ],
+          }
+        : {}),
       type: table.is_customizable
-        ? `CustomizeDbType<Selectable${pascal_table_name}, ${pascal_table_name}CustomTypes>`
+        ? `CustomizeDbType<Selectable${pascal_table_name}, ${pascal_table_name}CustomTypes${table.use_generic_provider ? '<T>' : ''}>`
         : `Selectable${pascal_table_name}`,
     },
     {
       kind: StructureKind.TypeAlias,
       isExported: true,
       name: `${pascal_table_name}Initializer`,
+      ...(table.use_generic_provider
+        ? {
+            typeParameters: [
+              {
+                name: 'T',
+                constraint: 'ProviderTypes',
+                default: 'ProviderTypes',
+              },
+            ],
+          }
+        : {}),
       type: table.is_customizable
-        ? `CustomizeDbTypeInitializer<Insertable${pascal_table_name}, ${pascal_table_name}CustomTypes>`
+        ? `CustomizeDbTypeInitializer<Insertable${pascal_table_name}, ${pascal_table_name}CustomTypes${table.use_generic_provider ? '<T>' : ''}>`
         : `Insertable${pascal_table_name}`,
     },
   )
@@ -84,7 +114,18 @@ export const createResultingTypeFile = (
       kind: StructureKind.TypeAlias,
       isExported: true,
       name: `${pascal_table_name}WithPgtuiBugs`,
-      type: `ReproducePgtuiBugs<${pascal_table_name}>`,
+      ...(table.use_generic_provider
+        ? {
+            typeParameters: [
+              {
+                name: 'T',
+                constraint: 'ProviderTypes',
+                default: 'ProviderTypes',
+              },
+            ],
+          }
+        : {}),
+      type: `ReproducePgtuiBugs<${pascal_table_name}${table.use_generic_provider ? '<T>' : ''}>`,
       docs: [
         {
           description: `@deprecated Reproduces type bugs from the legacy \`pgtui\` library and should not be used in new code.\n\nSpecifically:\n- Columns ending in \`_id\` are incorrectly typed as \`string\`, regardless of their actual database type.\n- \`jsonb\` columns are typed as \`any\` instead of a more specific type.`,
@@ -95,7 +136,18 @@ export const createResultingTypeFile = (
       kind: StructureKind.TypeAlias,
       isExported: true,
       name: `${pascal_table_name}InitializerWithPgtuiBugs`,
-      type: `ReproducePgtuiBugs<${pascal_table_name}Initializer>`,
+      ...(table.use_generic_provider
+        ? {
+            typeParameters: [
+              {
+                name: 'T',
+                constraint: 'ProviderTypes',
+                default: 'ProviderTypes',
+              },
+            ],
+          }
+        : {}),
+      type: `ReproducePgtuiBugs<${pascal_table_name}Initializer${table.use_generic_provider ? '<T>' : ''}>`,
       docs: [
         {
           description: `@deprecated Reproduces type bugs from the legacy \`pgtui\` library and should not be used in new code.\n\nSpecifically:\n- Columns ending in \`_id\` are incorrectly typed as \`string\`, regardless of their actual database type.\n- \`jsonb\` columns are typed as \`any\` instead of a more specific type.`,

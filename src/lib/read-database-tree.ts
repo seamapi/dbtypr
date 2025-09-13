@@ -58,6 +58,7 @@ export const readDatabaseTree = (config: Config): DatabaseTree => {
         is_customizable,
         is_affected_by_pgtui_bugs,
         uses_zapatos_column_type: false,
+        use_generic_provider: false,
       }
 
       table.selectable_columns = getColumns(
@@ -70,6 +71,12 @@ export const readDatabaseTree = (config: Config): DatabaseTree => {
         table,
         zapatos_custom_types,
       )
+      if (config.is_generic_provider_enabled === true) {
+        table.use_generic_provider = Object.prototype.hasOwnProperty.call(
+          table.selectable_columns,
+          'provider_state',
+        )
+      }
 
       tables[table_name] = table
     }
