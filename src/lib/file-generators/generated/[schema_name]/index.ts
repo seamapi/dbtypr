@@ -32,7 +32,10 @@ export const createSchemaGeneratedTypeIndexFile = (
     {
       kind: StructureKind.ImportDeclaration,
       moduleSpecifier: '../utils',
-      namedImports: ['KyselyTable', 'KnexTable'],
+      namedImports: [
+        'KyselyTable',
+        ...(config.generate_knex_types === true ? ['KnexTable'] : []),
+      ],
       isTypeOnly: true,
     },
   ]

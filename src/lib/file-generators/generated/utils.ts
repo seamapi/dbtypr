@@ -11,9 +11,26 @@ export const createGeneratedUtilsFile = (
   const { project } = args
   const { output_dir } = config
 
+  const knex_import =
+    config.generate_knex_types === true ? '\nimport { Knex } from "knex"' : ''
+
+  const knex_types =
+    config.generate_knex_types === true
+      ? `
+type KnexInsertableTable<T> = {
+  [K in keyof T]: Knex.MaybeRawColumn<T[K]>
+}
+
+export type KnexTable<Selectable, Initializer> = Knex.CompositeTableType<
+  Selectable,
+  Partial<KnexInsertableTable<Initializer>>, // TODO remove \`Partial\` once we fix the code
+  Partial<KnexInsertableTable<Initializer>>
+>
+`
+      : ''
+
   const file_source = `import type { JSONValue } from "zapatos/db"
-import { type ColumnType } from "kysely"
-import { Knex } from "knex"
+import { type ColumnType } from "kysely"${knex_import}
 
 type PartialWithNever<T> = {
   [P in keyof T as T[P] extends never ? never : P]?: T[P]
@@ -30,17 +47,7 @@ export type KyselyTable<Selectable, Initializer> = {
       : never
   >
 }
-
-type KnexInsertableTable<T> = {
-  [K in keyof T]: Knex.MaybeRawColumn<T[K]>
-}
-
-export type KnexTable<Selectable, Initializer> = Knex.CompositeTableType<
-  Selectable,
-  Partial<KnexInsertableTable<Initializer>>, // TODO remove \`Partial\` once we fix the code
-  Partial<KnexInsertableTable<Initializer>>
->
-
+${knex_types}
 type KeysOfUnion<T> = T extends T ? keyof T : never
 
 type NullableKeys<T> = {
