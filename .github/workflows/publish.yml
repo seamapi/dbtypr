@@ -1,19 +1,27 @@
 ---
 name: Publish
 
-run-name: Publish ${{ github.ref_name }}
+run-name: Publish ${{ inputs.tag || github.ref_name }}
 
 on:
   push:
     tags:
       - v*
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag to publish to npm (e.g. v1.2.3)
+        required: true
 
 jobs:
   build:
     name: Build
     uses: ./.github/workflows/_build.yml
+    with:
+      ref: ${{ inputs.tag }}
   release:
     name: GitHub Releases
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     needs: build
@@ -47,13 +55,15 @@ jobs:
     name: npm
     uses: ./.github/workflows/_publish.yml
     needs: build
+    permissions:
+      contents: read
+      id-token: write
     with:
       artifact_name: ${{ needs.build.outputs.artifact_name }}
       registry_url: https://registry.npmjs.org
-    secrets:
-      registry_token: ${{ secrets.NPM_TOKEN }}
   github:
     name: GitHub Packages
+    if: github.event_name == 'push'
     uses: ./.github/workflows/_publish.yml
     permissions:
       contents: read
